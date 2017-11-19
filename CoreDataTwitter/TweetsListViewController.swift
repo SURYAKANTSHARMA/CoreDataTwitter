@@ -9,6 +9,7 @@
 import UIKit
 
 class TweetsListViewController: UITableViewController {
+    
     var user: User!
     
     override func viewDidLoad() {
@@ -39,10 +40,6 @@ class TweetsListViewController: UITableViewController {
         self.present(navigationVC, animated: true, completion: nil)
     }
     
-    @IBAction func sortButtonPressed(_ sender: UIBarButtonItem) {
-        
-        
-    }
     // MARK: - Table view data source
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return user.tweets?.count ?? 0

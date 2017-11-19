@@ -11,6 +11,7 @@ import UIKit
 class AddTweetViewController: UIViewController {
     
     var user: User!
+    
     var isEditable = false
     var tweet: Tweet? {
         didSet {
@@ -21,6 +22,7 @@ class AddTweetViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.title = isEditable ? "Edit Tweet" : "New Tweet"
         textView.becomeFirstResponder()
         if let tweet = tweet {
            textView.text = tweet.text
@@ -28,6 +30,10 @@ class AddTweetViewController: UIViewController {
     }
 
     @IBAction func doneButtonPressed(_ sender: UIBarButtonItem) {
+        guard let text = textView.text, !text.isEmpty else {
+            dismiss(animated: true, completion: nil)
+            return
+        }
         isEditable ? editTweet() : saveNewTweet()
         dismiss(animated: true, completion: nil)
     }
@@ -37,16 +43,11 @@ class AddTweetViewController: UIViewController {
     }
     
     func saveNewTweet() {
-      let context = AppDelegate.viewContext
+      let context = appDelegate.viewContext
       let tweet = Tweet(context: context)
       tweet.creationDate = Date() as NSDate
       tweet.text = textView.text
-      //tweet.tweetUser = user
-        /*
-         can do in either way
-         */
       user.addToTweets(tweet)
       user.managedObjectContext?.saveToDB()
-        
     }
 }

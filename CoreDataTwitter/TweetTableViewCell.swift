@@ -12,7 +12,7 @@ class TweetTableViewCell: UITableViewCell {
     var tweet: Tweet? {
         didSet {
           tweetTextLabel.text = tweet?.text
-            timeLabel.text = (tweet?.creationDate as Date?)?.convertToDisplayFormat()
+          timeLabel.text = (tweet?.creationDate as Date?)?.convertToDisplayFormat()
         }
     }
     

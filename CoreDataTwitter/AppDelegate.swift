@@ -9,16 +9,19 @@
 import UIKit
 import CoreData
 
+var appDelegate = UIApplication.shared.delegate as! AppDelegate
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-    
-    static var persistanceContainer: NSPersistentContainer = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
-    static var viewContext = AppDelegate.persistanceContainer.viewContext
+    var viewContext : NSManagedObjectContext {
+        return appDelegate.persistentContainer.viewContext
+    }
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        _ = try? User.getListOfUserInBackground()
         return true
     }
 
@@ -43,7 +46,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
         // Saves changes in the application's managed object context before the application terminates.
-        AppDelegate.saveContext()
+        appDelegate.saveContext()
     }
 
     // MARK: - Core Data stack
@@ -77,8 +80,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     // MARK: - Core Data Saving support
 
-    static func saveContext () {
-        let context = AppDelegate.persistanceContainer.viewContext
+     func saveContext () {
+        let context = appDelegate.persistentContainer.viewContext
         if context.hasChanges {
             do {
                 try context.save()

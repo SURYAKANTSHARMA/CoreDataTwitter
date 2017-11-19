@@ -6,7 +6,6 @@
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13173"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
-        <capability name="Navigation items with more than one left or right bar item" minToolsVersion="7.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -111,18 +110,11 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Your Tweets" id="coR-mj-sVg">
-                        <rightBarButtonItems>
-                            <barButtonItem systemItem="compose" id="0TA-z4-gSa">
-                                <connections>
-                                    <action selector="addNewTweetPressed:" destination="aV3-s7-LWY" id="fPO-HL-l24"/>
-                                </connections>
-                            </barButtonItem>
-                            <barButtonItem title="Sort" id="iZJ-ji-gMM">
-                                <connections>
-                                    <action selector="sortButtonPressed:" destination="aV3-s7-LWY" id="eBm-ef-fFf"/>
-                                </connections>
-                            </barButtonItem>
-                        </rightBarButtonItems>
+                        <barButtonItem key="rightBarButtonItem" systemItem="compose" id="0TA-z4-gSa">
+                            <connections>
+                                <action selector="addNewTweetPressed:" destination="aV3-s7-LWY" id="fPO-HL-l24"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                 </tableViewController>
@@ -130,7 +122,7 @@
             </objects>
             <point key="canvasLocation" x="1101.5999999999999" y="38.23088455772114"/>
         </scene>
-        <!--Enter Tweet-->
+        <!--New Tweet-->
         <scene sceneID="DHf-jS-tWk">
             <objects>
                 <viewController id="DMo-aV-xXg" customClass="AddTweetViewController" customModule="CoreDataTwitter" customModuleProvider="target" sceneMemberID="viewController">
@@ -157,7 +149,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="uFR-CO-qCb"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Enter Tweet" id="kSm-Uf-UB6">
+                    <navigationItem key="navigationItem" title="New Tweet" id="kSm-Uf-UB6">
                         <barButtonItem key="rightBarButtonItem" systemItem="done" id="AnZ-wt-TME">
                             <connections>
                                 <action selector="doneButtonPressed:" destination="DMo-aV-xXg" id="KG4-j2-uH9"/>

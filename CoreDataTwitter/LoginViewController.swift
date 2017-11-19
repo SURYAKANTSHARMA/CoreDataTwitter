@@ -23,24 +23,18 @@ class LoginViewController: UIViewController {
         guard let name = userNameTextField.text, !name.isEmpty else {
             return
         }
-        User.userExistInDataBase(name) { (user) in
-            self.user = user ?? createNewUser()
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        do {
+            user = try User.findOrCreateUser(name)
+            UIApplication.shared.isNetworkActivityIndicatorVisible = false
             //push listVC
             let tweetsListVC = self.storyboard?.instantiateViewController(withIdentifier: "TweetsListViewController") as! TweetsListViewController
             tweetsListVC.user = user
             self.navigationController?.pushViewController(tweetsListVC, animated: true)
-            
+         } catch {
+            fatalError(error.localizedDescription)
         }
      }
-    
-    func createNewUser() -> User {
-        let viewContext = AppDelegate.viewContext
-        let user = User(context: viewContext)
-        user.name = userNameTextField.text
-        AppDelegate.saveContext()
-        return user
-    }
-    
-    
+  
 }
 
