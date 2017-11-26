@@ -1,2 +1,2 @@
 # CoreDataTwitter
-Practise core data for twitter like app
+Practice core data for twitter like app
