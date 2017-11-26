@@ -27,10 +27,12 @@ class LoginViewController: UIViewController {
         do {
             user = try User.findOrCreateUser(name)
             UIApplication.shared.isNetworkActivityIndicatorVisible = false
+            
             //push listVC
-            let tweetsListVC = self.storyboard?.instantiateViewController(withIdentifier: "TweetsListViewController") as! TweetsListViewController
+            if let tweetsListVC = self.storyboard?.instantiateViewController(withIdentifier: "TweetsListViewController") as? TweetsListViewController {
             tweetsListVC.user = user
             self.navigationController?.pushViewController(tweetsListVC, animated: true)
+            }
          } catch {
             fatalError(error.localizedDescription)
         }
