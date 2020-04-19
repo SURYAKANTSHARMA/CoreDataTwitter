@@ -30,8 +30,6 @@ class FetchResultTweetListViewController: TweetsListViewController {
            fatalError(error.localizedDescription)
         }
     }
-    
-    
 }
 
 

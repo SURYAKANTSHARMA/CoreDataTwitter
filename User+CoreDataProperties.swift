@@ -19,7 +19,7 @@ extension User {
 
     @NSManaged public var name: String?
     @NSManaged public var tweets: NSSet?
-
+    
 }
 
 // MARK: Generated accessors for tweets

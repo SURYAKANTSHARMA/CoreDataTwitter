@@ -7,36 +7,36 @@
 //
 
 import UIKit
+import RxSwift
+import RxCocoa
 
 class LoginViewController: UIViewController {
 
     @IBOutlet weak var userNameTextField: UITextField!
     var user: User?
+    let disposebag =  DisposeBag()
+    @IBOutlet weak var doneButton: UIButton!
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        let tappedObservable = doneButton.rx.controlEvent(.touchUpInside).asObservable().withLatestFrom(userNameTextField.rx.text.asObservable()) { (_, text)  in
+            return text
+        }.compactMap{ $0 }
+        let input = LoginViewModel.Input(doneTrigger: tappedObservable)
+        let output = LoginViewModel().transform(input: input)
+        
+        output.isLoading.asDriver().drive(onNext: { isLoading in
+             UIApplication.shared.isNetworkActivityIndicatorVisible = true
+            }).disposed(by: disposebag)
+        output.user.drive(onNext: { user in
+            //push listVC
+                       if let tweetsListVC = self.storyboard?.instantiateViewController(withIdentifier: "TweetsListViewController") as? TweetsListViewController {
+                       tweetsListVC.user = user
+                       self.navigationController?.pushViewController(tweetsListVC, animated: true)
+            }
+            }).disposed(by: disposebag)
     }
 
-   
-    @IBAction func doneButtonPressed(_ sender: UIButton) {
-        guard let name = userNameTextField.text, !name.isEmpty else {
-            return
-        }
-        UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        do {
-            user = try User.findOrCreateUser(name)
-            UIApplication.shared.isNetworkActivityIndicatorVisible = false
-            
-            //push listVC
-            if let tweetsListVC = self.storyboard?.instantiateViewController(withIdentifier: "TweetsListViewController") as? TweetsListViewController {
-            tweetsListVC.user = user
-            self.navigationController?.pushViewController(tweetsListVC, animated: true)
-            }
-         } catch {
-            fatalError(error.localizedDescription)
-        }
-     }
-  
 }
 

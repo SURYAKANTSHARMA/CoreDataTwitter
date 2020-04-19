@@ -7,47 +7,41 @@
 //
 
 import UIKit
+import RxSwift
+import RxCocoa
 
 class AddTweetViewController: UIViewController {
     
     var user: User!
-    
-    var isEditable = false
-    var tweet: Tweet? {
-        didSet {
-         isEditable = true
-        }
-    }
     @IBOutlet weak var textView: UITextView!
+    var viewModel: AddTweetViewModel!
+    @IBOutlet weak var doneButton: UIBarButtonItem!
+    var isEditable = false
+    var tweet: Tweet?
+    let bag = DisposeBag()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.title = isEditable ? "Edit Tweet" : "New Tweet"
+        viewModel = AddTweetViewModel(tweet: tweet, user: user)
+        
         textView.becomeFirstResponder()
         if let tweet = tweet {
            textView.text = tweet.text
         }
-    }
-
-    @IBAction func doneButtonPressed(_ sender: UIBarButtonItem) {
-        guard let text = textView.text, !text.isEmpty else {
-            dismiss(animated: true, completion: nil)
-            return
-        }
-        isEditable ? editTweet() : saveNewTweet()
-        dismiss(animated: true, completion: nil)
-    }
-    func editTweet() {
-        tweet?.text = textView.text
-        tweet?.managedObjectContext?.saveToDB()
+        
+        bindViewModel()
     }
     
-    func saveNewTweet() {
-      let context = appDelegate.viewContext
-      let tweet = Tweet(context: context)
-      tweet.creationDate = Date() as NSDate
-      tweet.text = textView.text
-      user.addToTweets(tweet)
-      user.managedObjectContext?.saveToDB()
+    func bindViewModel() {
+        let doneButtonObservable = doneButton.rx.tap.withLatestFrom(textView.rx.text).map { $0 ?? "" }
+        let input = AddTweetViewModel.Input(viewDidLoadTrigger: Observable.just(Void()), doneButtonTrigger: doneButtonObservable)
+        let output = viewModel.transform(input: input)
+        output.popScreen.drive(onNext: { [weak self] _ in
+            self?.dismiss(animated: true, completion: nil)
+        }).disposed(by: bag)
+        
+        output.title.drive(onNext: { self.title = $0 }).disposed(by: bag)
     }
+    
+    
 }
